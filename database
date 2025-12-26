@@ -1,0 +1,44 @@
+-- 1. USERS Table (Base for Inheritance)
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    role ENUM('jobseeker', 'employer') NOT NULL
+);
+
+-- 2. JOBSEEKERS Table (Subclass Details)
+CREATE TABLE jobseekers (
+    user_id INT PRIMARY KEY,
+    resume VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 3. EMPLOYERS Table (Subclass Details)
+CREATE TABLE employers (
+    user_id INT PRIMARY KEY,
+    company_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 4. JOBS Table (Core Content)
+CREATE TABLE jobs (
+    job_id INT AUTO_INCREMENT PRIMARY KEY,
+    employer_id INT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    location VARCHAR(50),
+    FOREIGN KEY (employer_id) REFERENCES employers(user_id) ON DELETE CASCADE
+);
+
+-- 5. APPLICATIONS Table (Connecting JobSeekers to Jobs)
+CREATE TABLE applications (
+    application_id INT AUTO_INCREMENT PRIMARY KEY,
+    job_id INT NOT NULL,
+    seeker_id INT NOT NULL,
+    application_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (seeker_id) REFERENCES jobseekers(user_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_application (job_id, seeker_id)
+);

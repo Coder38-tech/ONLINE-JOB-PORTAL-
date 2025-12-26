@@ -1,8 +1,0 @@
-com\example\jobportal\exceptions\UserNotFoundException.class
-com\example\jobportal\dao\DBUtil.class
-com\example\jobportal\servlets\RegisterServlet.class
-com\example\jobportal\model\Employer.class
-com\example\jobportal\servlets\LoginServlet.class
-com\example\jobportal\model\User.class
-com\example\jobportal\model\JobSeeker.class
-com\example\jobportal\dao\UserDAO.class
